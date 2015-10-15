@@ -1,5 +1,5 @@
 from flask import Flask, request, session, redirect, url_for, jsonify
-from motor_driver import motors
+from motor_driver import motors, MAX_SPEED
 
 app = Flask(__name__)
 
@@ -29,8 +29,26 @@ def authenticate():
 
 @app.route('/config', methods=['GET'])
 def configuration():
-    config = {'MAX_SPEED': 480}
+    config = {'MAX_SPEED': MAX_SPEED}
     return jsonify(**config)
+
+@app.route('/command', methods=['GET', 'POST'])
+def command():
+    if request.method == 'POST':
+        command_data = _parse_command(request.form)
+        _execute(command_data)
+        message = {'status': 'queued', 'message': 'Command executed'}
+        return jsonify(**message)
+
+def _execute(command):
+    pass
+
+def _parse_command(data):
+    return {
+        'action':    data['action'],
+        'direction': data['direction'],
+        'time':      data['time'],
+    }
 
 if __name__ == "__main__":
     app.run()

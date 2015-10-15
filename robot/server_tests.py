@@ -39,5 +39,14 @@ class ServerTestCase(unittest.TestCase):
         data = json.loads(response.data)
         assert data['MAX_SPEED'] == 480
 
+    def test_post_command_go_forward(self):
+        response = self.app.post('/command', data={
+            'action': 'go',
+            'direction': 'forward',
+            'time': '2',
+        })
+        data = json.loads(response.data)
+        assert data['status'] == 'queued'
+
 if __name__ == '__main__':
     unittest.main()
