@@ -1,4 +1,5 @@
-from flask import Flask, request, session, redirect, url_for, jsonify
+from flask import (Flask, request, session, redirect, url_for, jsonify,
+        render_template)
 from motor_driver import MAX_SPEED
 
 import actions
@@ -11,22 +12,38 @@ app.config.update(dict(
     PASSWORD='test',
 ))
 
-@app.route("/")
-def hello():
-    return "Hello, World!"
+@app.route('/')
+def index():
+    if session.get('authenticated', False):
+        return redirect(url_for('dashboard'))
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if valid_login(request.form['username'], request.form['password']):
+            session['authenticated'] = True
+            return redirect(url_for('dashboard'))
+    else:
+        return render_template('login.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 @app.route('/authenticate', methods=['GET', 'POST'])
 def authenticate():
     if request.method == 'POST':
-        if (request.form['username'] != app.config['USERNAME'] or
-            request.form['password'] != app.config['PASSWORD']):
+        if valid_login(request.form['username'], request.form['password']):
+            session['authenticated'] = True
+            message = {'status': 'success', 'message': 'Success'}
+        else:
             message = {
                 'status': 'failure',
                 'message': 'Invalid username or password',
             }
-        else:
-            session['authenticated'] = True
-            message = {'status': 'success', 'message': 'Success'}
         return jsonify(**message)
 
 @app.route('/config', methods=['GET'])
@@ -37,21 +54,27 @@ def configuration():
 @app.route('/command', methods=['GET', 'POST'])
 def command():
     if request.method == 'POST':
-        command_data = _parse_command(request.form)
-        _execute(command_data)
+        command_data = parse_command(request.form)
+        execute(command_data)
         message = {'status': 'queued', 'message': 'Command executed'}
         return jsonify(**message)
 
-def _parse_command(data):
+def valid_login(username, password):
+    if username == USERNAME and password == PASSWORD:
+        return True
+    else:
+        return False
+
+def parse_command(data):
     return {
-        'action':    data['action'],
+        'action': data['action'],
         'direction': data['direction'],
-        'time':      float(data['time']),
+        'time': float(data['time']),
     }
 
-def _execute(command):
+def execute(command):
     function = getattr(actions, command['action'])
     return function(command)
 
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=80)
