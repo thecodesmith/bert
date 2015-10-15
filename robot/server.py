@@ -26,8 +26,9 @@ def login():
         if valid_login(request.form['username'], request.form['password']):
             session['authenticated'] = True
             return redirect(url_for('dashboard'))
-    else:
-        return render_template('login.html')
+        else:
+            error = 'Invalid username or password'
+    return render_template('login.html', error=error)
 
 @app.route('/dashboard')
 def dashboard():
@@ -60,7 +61,7 @@ def command():
         return jsonify(**message)
 
 def valid_login(username, password):
-    if username == USERNAME and password == PASSWORD:
+    if username == app.config['USERNAME'] and password == app.config['PASSWORD']:
         return True
     else:
         return False
@@ -77,4 +78,4 @@ def execute(command):
     return function(command)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=8001)

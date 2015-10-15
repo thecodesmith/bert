@@ -5,8 +5,18 @@
     <title>Login</title>
 </head>
 <body>
-    Login form
-    <form>
+    <h1>Please Log In</h1>
+
+    {% if error %}
+    <div>
+        Error: {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        Username: <input name="username"><br/>
+        Password: <input name="password" type="password"><br/>
+        <input type="submit" value="Log In">
     </form>
 </body>
 </html>

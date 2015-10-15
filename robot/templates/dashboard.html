@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+
+    {% if error %}
+    <div>
+        Error: {{ error }}
+    </div>
+    {% endif %}
+
+    <h2>Command:</h2>
+    <form method="POST">
+        <label label-for="action">Action:</label>
+        <input name="action"><br/>
+        <label label-for="direction">Direction:</label>
+        <input name="direction"><br/>
+        <label label-for="time">Time:</label>
+        <input name="time"><br/>
+        <label label-for="speed">Speed:</label>
+        <input name="speed"><br/>
+        <input type="submit" value="Run">
+    </form>
+</body>
+</html>
