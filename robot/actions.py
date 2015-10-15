@@ -5,7 +5,13 @@ from motor_driver import motors, MAX_SPEED
 _max = MAX_SPEED / 4
 
 def go(params):
-    pass
+    speed = params.get('speed', _max)
+    if params['direction'] == 'forward':
+        motors.setSpeeds(speed, speed)
+    elif params['direction'] == 'backward':
+        motors.setSpeeds(-speed, -speed)
+    _sleep(params['time'])
+    _stop()
 
 def turn(params):
     speed = params.get('speed', _max)

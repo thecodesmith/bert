@@ -43,7 +43,15 @@ class ServerTestCase(unittest.TestCase):
         response = self.app.post('/command', data={
             'action': 'go',
             'direction': 'forward',
-            'time': '2',
+            'time': '1',
+        })
+        data = json.loads(response.data)
+        assert data['status'] == 'queued'
+
+        response = self.app.post('/command', data={
+            'action': 'go',
+            'direction': 'backward',
+            'time': '1',
         })
         data = json.loads(response.data)
         assert data['status'] == 'queued'
@@ -60,7 +68,7 @@ class ServerTestCase(unittest.TestCase):
         response = self.app.post('/command', data={
             'action': 'turn',
             'direction': 'right',
-            'time': '1.2',
+            'time': '1.1',
         })
         data = json.loads(response.data)
         assert data['status'] == 'queued'
