@@ -30,3 +30,7 @@ Create a virtual environment in the source directory:
 Install dependencies:
 
     pip install -r requirements.txt
+
+Run tests (Note: sudo is required to access GPIO pins which control the motors):
+
+    sudo python robot/server_tests.py
