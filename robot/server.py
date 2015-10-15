@@ -1,5 +1,4 @@
-from flask import (Flask, request, session, redirect, url_for, jsonify,
-        render_template)
+from flask import (Flask, request, session, redirect, url_for, jsonify, render_template)
 from motor_driver import MAX_SPEED
 
 import actions

@@ -19,10 +19,6 @@ class ServerTestCase(unittest.TestCase):
             password=password,
         ))
 
-    def test_get_config_settings(self):
-        r = self.app.get('/')
-        assert 'Hello' in r.data
-
     def test_authentication(self):
         response = self.authenticate('bert', 'test')
         assert response.status == '200 OK'
