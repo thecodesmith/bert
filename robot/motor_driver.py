@@ -52,11 +52,11 @@ class Motors(object):
     MAX_SPEED = _max_speed
 
     def __init__(self):
-        self.motor1 = Motor(12, 5)
-        self.motor2 = Motor(13, 6)
+        self.right = Motor(12, 5)
+        self.left  = Motor(13, 6)
 
-    def setSpeeds(self, m1_speed, m2_speed):
-        self.motor1.setSpeed(m1_speed)
-        self.motor2.setSpeed(m2_speed)
+    def setSpeeds(self, r_speed, l_speed):
+        self.right.setSpeed(r_speed)
+        self.left.setSpeed(l_speed)
 
 motors = Motors()

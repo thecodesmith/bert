@@ -1,5 +1,6 @@
 from flask import Flask, request, session, redirect, url_for, jsonify
-from motor_driver import motors, MAX_SPEED
+
+import actions
 
 app = Flask(__name__)
 
@@ -40,15 +41,16 @@ def command():
         message = {'status': 'queued', 'message': 'Command executed'}
         return jsonify(**message)
 
-def _execute(command):
-    pass
-
 def _parse_command(data):
     return {
         'action':    data['action'],
         'direction': data['direction'],
         'time':      data['time'],
     }
+
+def _execute(command):
+    function = getattr(actions, command['action'])
+    return function(command)
 
 if __name__ == "__main__":
     app.run()
