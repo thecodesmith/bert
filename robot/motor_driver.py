@@ -59,4 +59,7 @@ class Motors(object):
         self.right.setSpeed(r_speed)
         self.left.setSpeed(l_speed)
 
+    def stop(self):
+        self.setSpeeds(0, 0)
+
 motors = Motors()

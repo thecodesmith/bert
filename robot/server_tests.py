@@ -48,5 +48,22 @@ class ServerTestCase(unittest.TestCase):
         data = json.loads(response.data)
         assert data['status'] == 'queued'
 
+    def test_post_command_turn(self):
+        response = self.app.post('/command', data={
+            'action': 'turn',
+            'direction': 'left',
+            'time': '1.5',
+        })
+        data = json.loads(response.data)
+        assert data['status'] == 'queued'
+
+        response = self.app.post('/command', data={
+            'action': 'turn',
+            'direction': 'right',
+            'time': '1.5',
+        })
+        data = json.loads(response.data)
+        assert data['status'] == 'queued'
+
 if __name__ == '__main__':
     unittest.main()

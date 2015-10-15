@@ -1,4 +1,5 @@
 from flask import Flask, request, session, redirect, url_for, jsonify
+from motor_driver import MAX_SPEED
 
 import actions
 
@@ -45,7 +46,7 @@ def _parse_command(data):
     return {
         'action':    data['action'],
         'direction': data['direction'],
-        'time':      data['time'],
+        'time':      float(data['time']),
     }
 
 def _execute(command):
