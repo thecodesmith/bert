@@ -10,20 +10,23 @@ To view the original project proposal, see [docs/proposal.md](docs/proposal.md).
 
 ## Development Setup
 
-This project depends on several Python libraries:
+Download the source code:
 
-* WiringPi
-* WiringPi2-Python
+    git clone https://github.com/thecodesmith/bert
+    cd bert
 
-Download and install WiringPi:
+### Python Development (Robot-side)
 
-    git clone git://git.drogon.net/wiringPi
-    cd wiringPi
-    ./build
+For developing robot-side code, ensure Python development tools are installed:
 
-Next, download and install WiringPi2-Python:
+* Python 2.7.x
+* Virtualenv
 
-    git clone https://github.com/Gadgetoid/WiringPi2-Python
-    cd WiringPi2-Python
-    sudo apt-get install python-dev python-setuptools
-    sudo python setup.py install
+Create a virtual environment in the source directory:
+
+    virtualenv venv
+    source ./venv/bin/activate
+
+Install dependencies:
+
+    pip install -r requirements.txt
