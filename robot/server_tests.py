@@ -34,5 +34,10 @@ class ServerTestCase(unittest.TestCase):
         assert data['status'] == 'failure'
         assert data['message'] == 'Invalid username or password'
 
+    def test_get_configuration(self):
+        response = self.app.get('/config')
+        data = json.loads(response.data)
+        assert data['MAX_SPEED'] == 480
+
 if __name__ == '__main__':
     unittest.main()

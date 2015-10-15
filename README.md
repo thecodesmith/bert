@@ -14,7 +14,6 @@ This project depends on several Python libraries:
 
 * WiringPi
 * WiringPi2-Python
-* pololu_drv_8835_rpi
 
 Download and install WiringPi:
 
@@ -28,11 +27,3 @@ Next, download and install WiringPi2-Python:
     cd WiringPi2-Python
     sudo apt-get install python-dev python-setuptools
     sudo python setup.py install
-
-Finally, download and install the pololu_drv_8835_rpi library:
-
-    git clone https://github.com/pololu/drv8835-motor-driver-rpi
-    cd drv8835-motor-driver-rpi
-    sudo python setup.py install
-
-See the `example.py` script for usage of the Pololu 8835 motor driver functions.

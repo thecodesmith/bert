@@ -1,4 +1,5 @@
 from flask import Flask, request, session, redirect, url_for, jsonify
+from motor_driver import motors
 
 app = Flask(__name__)
 
@@ -24,7 +25,12 @@ def authenticate():
         else:
             session['authenticated'] = True
             message = {'status': 'success', 'message': 'Success'}
-    return jsonify(**message)
+        return jsonify(**message)
+
+@app.route('/config', methods=['GET'])
+def configuration():
+    config = {'MAX_SPEED': 480}
+    return jsonify(**config)
 
 if __name__ == "__main__":
     app.run()
