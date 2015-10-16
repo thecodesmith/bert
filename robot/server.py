@@ -1,4 +1,5 @@
-from flask import (Flask, request, session, redirect, url_for, jsonify, render_template)
+from flask import (Flask, request, session, redirect, url_for, jsonify,
+        render_template)
 from motor_driver import MAX_SPEED
 
 import actions
@@ -38,8 +39,7 @@ def dashboard():
 def command():
     if request.method == 'POST':
         run_command(request.form)
-        message = {'status': 'queued', 'message': 'Command executed'}
-        return jsonify(**message)
+        return redirect(url_for('dashboard'))
 
 def run_command(data):
     command_data = parse_command(data)
