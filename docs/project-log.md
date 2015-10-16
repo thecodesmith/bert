@@ -50,3 +50,19 @@ Goals:
 * Construct a permanent body for the robot
 * Complete code for commands listed in spec
 * Complete web server code to accept all available commands from a remote machine
+
+Ideas:
+
+* Define custom protocol and do simple socket communications?
+  - Pros:
+    - This would simplify IPC between Groovy DSL and Python hardware controller
+    - Overhead would be significantly lightened, with no HTTP server, requests, etc.
+    - Asynchronous commands might work better, with events and flow control
+      easier to implement
+  - Cons:
+    - More work to define and implement, while HTTP is already there
+* Switch HTTP server from Python and Flask to Groovy and Vert.x?
+  - Pros:
+    - Groovy
+    - Still lightweight: 650KB
+

@@ -2,18 +2,14 @@ from flask import (Flask, request, session, redirect, url_for, jsonify, render_t
 from motor_driver import MAX_SPEED
 
 import actions
+from auth import authenticated, valid_login
 
 app = Flask(__name__)
-
-app.config.update(dict(
-    SECRET_KEY='dev key',
-    USERNAME='bert',
-    PASSWORD='test',
-))
+app.config.from_object('settings')
 
 @app.route('/')
 def index():
-    if session.get('authenticated', False):
+    if authenticated():
         return redirect(url_for('dashboard'))
     else:
         return redirect(url_for('login'))
@@ -29,41 +25,25 @@ def login():
             error = 'Invalid username or password'
     return render_template('login.html', error=error)
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
-
-@app.route('/authenticate', methods=['GET', 'POST'])
-def authenticate():
-    if request.method == 'POST':
-        if valid_login(request.form['username'], request.form['password']):
-            session['authenticated'] = True
-            message = {'status': 'success', 'message': 'Success'}
-        else:
-            message = {
-                'status': 'failure',
-                'message': 'Invalid username or password',
-            }
-        return jsonify(**message)
-
 @app.route('/config', methods=['GET'])
 def configuration():
     config = {'MAX_SPEED': MAX_SPEED}
     return jsonify(**config)
 
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
 @app.route('/command', methods=['GET', 'POST'])
 def command():
     if request.method == 'POST':
-        command_data = parse_command(request.form)
-        execute(command_data)
+        run_command(request.form)
         message = {'status': 'queued', 'message': 'Command executed'}
         return jsonify(**message)
 
-def valid_login(username, password):
-    if username == app.config['USERNAME'] and password == app.config['PASSWORD']:
-        return True
-    else:
-        return False
+def run_command(data):
+    command_data = parse_command(data)
+    return execute(command_data)
 
 def parse_command(data):
     return {
