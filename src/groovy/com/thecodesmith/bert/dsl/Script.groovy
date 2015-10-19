@@ -77,6 +77,10 @@ class Command {
     Speed speed
     Duration time
 
+    static Command go(Direction direction, Duration time) {
+        new Command([action: Action.go, direction: direction, time: time])
+    }
+
     Command at(Speed speed) {
         this.speed = speed
         this
@@ -89,9 +93,7 @@ Number.metaClass.getFt = { return new Distance(delegate, DistanceUnit.foot) }
 forward = Direction.forward
 s = new Duration(1, TimeUnit.second)
 
-def go(Direction direction, Duration time) {
-    new Command([action: Action.go, direction: direction, time: time])
-}
+def go = Command.&go
 
 cmd = go forward, 5.seconds at 2.5.ft/s
 println 'Command created:'
