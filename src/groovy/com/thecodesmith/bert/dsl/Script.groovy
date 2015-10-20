@@ -6,34 +6,40 @@ enum Action { go, turn, stop }
 
 enum Direction { forward, backward, left, right, up, down }
 
-enum TimeUnit {
-    minute('min', 60),
-    second('s',    1)
-
+trait Unit {
     String abbreviation
     double multiplier
+
+    String toString() { abbreviation }
+}
+
+enum TimeUnit implements Unit {
+    minute('min', 60),
+    second('s',    1)
 
     TimeUnit(abbreviation, multiplier) {
         this.abbreviation = abbreviation
         this.multiplier = multiplier
     }
-
-    String toString() { abbreviation }
 }
 
-enum DistanceUnit {
+enum DistanceUnit implements Unit {
     foot('ft', 12),
     inch('in', 1)
-
-    String abbreviation
-    double multiplier
 
     DistanceUnit(String abbreviation, double multiplier) {
         this.abbreviation = abbreviation
         this.multiplier = multiplier
     }
+}
 
-    String toString() { abbreviation }
+enum RotationUnit implements Unit {
+    degree('deg', 1)
+
+    RotationUnit(String abbreviation, double multiplier) {
+        this.abbreviation = abbreviation
+        this.multiplier = multiplier
+    }
 }
 
 @TupleConstructor
@@ -41,7 +47,7 @@ class Distance {
     double amount
     DistanceUnit unit
 
-    Speed div(Duration t) {
+    Speed div(TimeUnit t) {
         new Speed(this, t)
     }
 
@@ -61,40 +67,132 @@ class Duration {
 }
 
 @TupleConstructor
-class Speed {
-    Distance distance
-    Duration duration
+class Rotation {
+    double amount
+    RotationUnit unit
+
+    RotationalSpeed div(TimeUnit t) {
+        new RotationalSpeed(this, t)
+    }
 
     String toString() {
-        "$distance/$duration"
+        "$amount $unit"
     }
 }
 
-@Canonical
+@TupleConstructor
+class Speed {
+    Distance distance
+    TimeUnit unit
+
+    String toString() {
+        "$distance/$unit"
+    }
+}
+
+@TupleConstructor
+class RotationalSpeed {
+    Rotation rotation
+    TimeUnit unit
+
+    String toString() {
+        "$rotation/$unit"
+    }
+}
+
+@TupleConstructor
 class Command {
     String action
-    Direction direction
-    Speed speed
     Duration time
 
-    static Command go(Direction direction, Duration time) {
-        new Command([action: Action.go, direction: direction, time: time])
+    String toString() {
+        "Command: $action"
+    }
+}
+
+@TupleConstructor
+class GoCommand extends Command {
+    Direction direction
+    Speed speed = new Speed(new Distance(1, DistanceUnit.foot), TimeUnit.second)
+
+    static GoCommand go(Direction direction, Duration time) {
+        new GoCommand([action: Action.go, direction: direction, time: time])
     }
 
     Command at(Speed speed) {
         this.speed = speed
         this
     }
+
+    String toString() {
+        super.toString() + " $direction for $time at $speed"
+    }
 }
 
+@TupleConstructor
+class TurnCommand extends Command {
+    Direction direction
+    RotationalSpeed speed = new RotationalSpeed(new Rotation(5, RotationUnit.degree), TimeUnit.second)
+
+    static TurnCommand turn(Direction direction, Duration time) {
+        new TurnCommand([action: Action.turn, direction: direction, time: time])
+    }
+
+    TurnCommand at(RotationalSpeed speed) {
+        this.speed = speed
+        this
+    }
+
+    String toString() {
+        super.toString() + " $direction for $time at $speed"
+    }
+}
+
+@TupleConstructor
+class StopCommand extends Command {
+
+    static StopCommand stop() {
+        new StopCommand([action: Action.stop])
+    }
+
+    StopCommand over(Duration time) {
+        this.time = time
+        this
+    }
+
+    String toString() {
+        super.toString() + (time ? " over $time" : "")
+    }
+}
+
+Number.metaClass.getSecond  = { return new Duration(delegate, TimeUnit.second) }
 Number.metaClass.getSeconds = { return new Duration(delegate, TimeUnit.second) }
-Number.metaClass.getFt = { return new Distance(delegate, DistanceUnit.foot) }
+Number.metaClass.getFt      = { return new Distance(delegate, DistanceUnit.foot) }
+Number.metaClass.getDeg     = { return new Rotation(delegate, RotationUnit.degree) }
 
 forward = Direction.forward
-s = new Duration(1, TimeUnit.second)
+backward = Direction.backward
+left = Direction.left
+right = Direction.right
 
-def go = Command.&go
+s = TimeUnit.second
+
+go = GoCommand.&go
+turn = TurnCommand.&turn
+def getStop() { StopCommand.stop() }
+def stop(over) { StopCommand.stop().over(over) }
 
 cmd = go forward, 5.seconds at 2.5.ft/s
-println 'Command created:'
+println cmd
+
+cmd = go backward, 3.2.seconds
+println cmd
+
+cmd = turn left, 2.seconds at 15.deg/s
+println cmd
+
+cmd = stop
+println cmd
+
+cmd = stop over: 1.second
 println cmd
