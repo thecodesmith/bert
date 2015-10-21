@@ -9,7 +9,12 @@ Number.metaClass.getDegrees = { return new Rotation(delegate, RotationUnit.degre
 
 s = TimeUnit.second
 
-enum Action { go, turn, arc, stop }
+class Robot {
+    static DEFAULT_SPEED = new Speed(new Distance(2, DistanceUnit.foot), TimeUnit.second)
+    static DEFAULT_ARC = 30.0.degrees
+}
+
+enum Action { go, turn, arc, stop, slow, speed }
 
 enum Direction { forward, backward, left, right, up, down }
 
@@ -109,10 +114,8 @@ class Command {
 
 @TupleConstructor
 class GoCommand extends Command {
-    static DEFAULT_SPEED = new Speed(new Distance(2, DistanceUnit.foot), TimeUnit.second)
-
     Direction direction
-    Speed speed = DEFAULT_SPEED
+    Speed speed = Robot.DEFAULT_SPEED
 
     static GoCommand go(Direction direction, Duration time) {
         new GoCommand([action: Action.go, direction: direction, time: time])
@@ -149,12 +152,9 @@ class TurnCommand extends Command {
 
 @TupleConstructor
 class ArcCommand extends Command {
-    static DEFAULT_SPEED = new Speed(new Distance(2, DistanceUnit.foot), TimeUnit.second)
-    static DEFAULT_ARC = 30.0.degrees
-
     Direction direction
-    Speed speed = DEFAULT_SPEED
-    Rotation angle = DEFAULT_ARC
+    Speed speed = Robot.DEFAULT_SPEED
+    Rotation angle = Robot.DEFAULT_ARC
 
     static ArcCommand arc(Direction direction, Duration time) {
         new ArcCommand([action: Action.arc, direction: direction, time: time])
@@ -192,24 +192,67 @@ class StopCommand extends Command {
     }
 }
 
+@TupleConstructor
+class AccelerateCommand extends Command {
+    Direction direction
+    Speed speed = Robot.DEFAULT_SPEED
+
+    static AccelerateCommand slow(Direction direction) {
+        new AccelerateCommand([action: Action.slow, direction: direction])
+    }
+
+    static AccelerateCommand speed(Direction direction) {
+        new AccelerateCommand([action: Action.speed, direction: direction])
+    }
+
+    AccelerateCommand to(Speed speed) {
+        this.speed = speed
+        this
+    }
+
+    AccelerateCommand over(Duration time) {
+        this.time = time
+        this
+    }
+
+    String toString() {
+        super.toString() + " $direction to $speed over $time"
+    }
+}
+
 forward = Direction.forward
 backward = Direction.backward
 left = Direction.left
 right = Direction.right
+down = Direction.down
+up = Direction.up
 
 go = GoCommand.&go
 turn = TurnCommand.&turn
 arc = ArcCommand.&arc
+slow = AccelerateCommand.&slow
 def getStop() { StopCommand.stop() }
 def stop(args) { StopCommand.stop().over(args.over) }
 
 cmd = go forward, 5.seconds at 2.5.ft/s
 println cmd
 
-cmd = go backward, 3.2.seconds
-println cmd
+/* cmd = go backward, 3.2.seconds */
+/* println cmd */
 
 cmd = turn left, 2.seconds at 15.deg/s
+println cmd
+
+cmd = arc left, 4.seconds at 45.degrees at 1.5.ft/s
+println cmd
+
+cmd = arc left, 3.seconds at 60.degrees
+println cmd
+
+cmd = arc right, 15.seconds
+println cmd
+
+cmd = arc right, 12.seconds at 2.2.ft/s
 println cmd
 
 cmd = stop
@@ -218,6 +261,8 @@ println cmd
 cmd = stop over: 1.second
 println cmd
 
-cmd = arc left, 4.seconds at 45.degrees at 1.5.ft/s
+cmd = slow down to 1.5.ft/s
 println cmd
 
+cmd = slow down to 1.8.ft/s over 2.seconds
+println cmd
