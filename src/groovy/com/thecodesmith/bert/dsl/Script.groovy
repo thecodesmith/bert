@@ -177,9 +177,12 @@ class ArcCommand extends Command {
 
 @TupleConstructor
 class StopCommand extends Command {
+    Duration time = new Duration(0, TimeUnit.second)
 
-    static StopCommand stop() {
-        new StopCommand([action: Action.stop])
+    static StopCommand stop(Map args) {
+        StopCommand cmd = new StopCommand([action: Action.stop])
+        cmd.time = args?.over ?: cmd.time
+        cmd
     }
 
     StopCommand over(Duration time) {
@@ -188,7 +191,7 @@ class StopCommand extends Command {
     }
 
     String toString() {
-        super.toString() + (time ? " over $time" : "")
+        super.toString() + (time.amount ? " over $time" : "")
     }
 }
 
@@ -196,6 +199,7 @@ class StopCommand extends Command {
 class AccelerateCommand extends Command {
     Direction direction
     Speed speed = Robot.DEFAULT_SPEED
+    Duration time = new Duration(0, TimeUnit.second)
 
     static AccelerateCommand slow(Direction direction) {
         new AccelerateCommand([action: Action.slow, direction: direction])
@@ -231,14 +235,15 @@ go = GoCommand.&go
 turn = TurnCommand.&turn
 arc = ArcCommand.&arc
 slow = AccelerateCommand.&slow
+speed = AccelerateCommand.&speed
 def getStop() { StopCommand.stop() }
 def stop(args) { StopCommand.stop().over(args.over) }
 
 cmd = go forward, 5.seconds at 2.5.ft/s
 println cmd
 
-/* cmd = go backward, 3.2.seconds */
-/* println cmd */
+cmd = go backward, 3.2.seconds
+println cmd
 
 cmd = turn left, 2.seconds at 15.deg/s
 println cmd
@@ -265,4 +270,10 @@ cmd = slow down to 1.5.ft/s
 println cmd
 
 cmd = slow down to 1.8.ft/s over 2.seconds
+println cmd
+
+cmd = speed up to 3.0.ft/s
+println cmd
+
+cmd = speed up to 3.1.ft/s over 1.second
 println cmd
