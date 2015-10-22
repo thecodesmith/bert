@@ -24,6 +24,7 @@ class ScriptRunner {
     static CompilerConfiguration getConfiguration() {
         def configuration = new CompilerConfiguration()
         configuration.addCompilationCustomizers(importCustomizer)
+        configuration.scriptBaseClass = RobotBaseScript.class.name
         configuration
     }
 

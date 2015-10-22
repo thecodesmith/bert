@@ -4,13 +4,33 @@ abstract class RobotBaseScript extends Script {
 
     TimeUnit s = TimeUnit.second
 
-    def go = GoCommand.&go
-    def turn = TurnCommand.&turn
-    def arc = ArcCommand.&arc
-    def slow = AccelerateCommand.&slow
-    def speed = AccelerateCommand.&speed
-    def getStop() { StopCommand.stop() }
-    def stop(args) { StopCommand.stop().over(args.over) }
+    static GoCommand go(Direction direction, Duration time) {
+        new GoCommand([action: Action.go, direction: direction, time: time])
+    }
+
+    static TurnCommand turn(Direction direction, Duration time) {
+        new TurnCommand([action: Action.turn, direction: direction, time: time])
+    }
+
+    static ArcCommand arc(Direction direction, Duration time) {
+        new ArcCommand([action: Action.arc, direction: direction, time: time])
+    }
+
+    static AccelerateCommand slow(Direction direction) {
+        new AccelerateCommand([action: Action.slow, direction: direction])
+    }
+
+    static AccelerateCommand speed(Direction direction) {
+        new AccelerateCommand([action: Action.speed, direction: direction])
+    }
+
+    static StopCommand stop(Map args) {
+        StopCommand cmd = new StopCommand([action: Action.stop])
+        cmd.time = args?.over ?: cmd.time
+        cmd
+    }
+
+    static StopCommand getStop() { stop() }
 
     abstract void scriptBody()
 
@@ -19,7 +39,7 @@ abstract class RobotBaseScript extends Script {
         scriptBody()
     }
 
-    def addNumberUnits() {
+    void addNumberUnits() {
         Number.metaClass.getSecond  = { return new Duration(delegate, TimeUnit.second) }
         Number.metaClass.getSeconds = { return new Duration(delegate, TimeUnit.second) }
         Number.metaClass.getFt      = { return new Distance(delegate, DistanceUnit.foot) }
