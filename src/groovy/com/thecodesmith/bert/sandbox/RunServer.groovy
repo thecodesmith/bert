@@ -1,4 +1,4 @@
 package com.thecodesmith.bert
 
-server = new GroovyServer(4444)
+server = new Server(4444)
 server.start()

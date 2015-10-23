@@ -1,7 +1,14 @@
 # This code adapted from the Pololu motor driver library
 # located at https://github.com/pololu/drv8835-motor-driver-rpi
 
-import wiringpi2
+import logging
+
+try:
+    import wiringpi2
+except ImportError:
+    print 'Warning: wiringpi2 library not found, ' + \
+            'importing wiringpi2_mock instead for testing'
+    import wiringpi2_mock as wiringpi2
 
 # Motor speeds for this library are specified as numbers
 # between -MAX_SPEED and MAX_SPEED, inclusive.

@@ -11,15 +11,20 @@ class HardwareDriver {
     }
 
     String issueCommand(String command) {
+        Socket socket
+
         try {
-            Socket socket = new Socket('localhost', DEFAULT_PORT)
+            socket = new Socket('localhost', DEFAULT_PORT)
 
             socket.withStreams { input, output ->
                 output << command + '\n'
                 return input.newReader().readLine()
             }
+
         } catch (e) {
-            return 'Failed'
+            return 'Failed: ' + e
+        } finally {
+            socket?.close()
         }
     }
 }
