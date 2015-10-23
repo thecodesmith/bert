@@ -6,6 +6,21 @@ abstract class Robot extends Script {
     static DEFAULT_SPEED = new Speed(new Distance(2, DistanceUnit.foot), TimeUnit.second)
     static DEFAULT_ARC = new Rotation(30, RotationUnit.degree)
 
+    abstract void scriptBody()
+
+    def run() {
+        addNumberUnits()
+        scriptBody()
+    }
+
+    void addNumberUnits() {
+        Number.metaClass.getSecond  = { return new Duration(delegate, TimeUnit.second) }
+        Number.metaClass.getSeconds = { return new Duration(delegate, TimeUnit.second) }
+        Number.metaClass.getFt      = { return new Distance(delegate, DistanceUnit.foot) }
+        Number.metaClass.getDeg     = { return new Rotation(delegate, RotationUnit.degree) }
+        Number.metaClass.getDegrees = { return new Rotation(delegate, RotationUnit.degree) }
+    }
+
     static GoCommand go(Direction direction, Duration time) {
         new GoCommand([action: Action.go, direction: direction, time: time])
     }
@@ -33,19 +48,4 @@ abstract class Robot extends Script {
     }
 
     static StopCommand getStop() { stop() }
-
-    abstract void scriptBody()
-
-    def run() {
-        addNumberUnits()
-        scriptBody()
-    }
-
-    void addNumberUnits() {
-        Number.metaClass.getSecond  = { return new Duration(delegate, TimeUnit.second) }
-        Number.metaClass.getSeconds = { return new Duration(delegate, TimeUnit.second) }
-        Number.metaClass.getFt      = { return new Distance(delegate, DistanceUnit.foot) }
-        Number.metaClass.getDeg     = { return new Rotation(delegate, RotationUnit.degree) }
-        Number.metaClass.getDegrees = { return new Rotation(delegate, RotationUnit.degree) }
-    }
 }
