@@ -1,16 +1,18 @@
+package com.thecodesmith.bert.dsl
+
 class HardwareDriver {
 
     static DEFAULT_PORT = 4444
 
-    int getMaxSpeed() {
+    static int getMaxSpeed() {
         return issueCommand('MAX_SPEED') as int
     }
 
-    String setSpeeds(left, right) {
+    static String setSpeeds(int left, int right) {
         return issueCommand("${left},${right}")
     }
 
-    String issueCommand(String command) {
+    static String issueCommand(String command) {
         Socket socket
 
         try {
