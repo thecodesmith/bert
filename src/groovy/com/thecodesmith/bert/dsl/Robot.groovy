@@ -58,9 +58,6 @@ abstract class Robot extends Script {
     }
 
     static runCommands() {
-        println '========================'
-        println '=== Running Commands ==='
-        println '========================'
         commands.each { command ->
             println command
             command.execute()

@@ -50,6 +50,7 @@ class Speed {
     TimeUnit unit
 
     double getTotal() { distance.total * unit.multiplier }
+    int getMotorSpeed() { (total * 10) as int }
 
     String toString() { "$distance/$unit" }
 }
@@ -60,6 +61,7 @@ class RotationalSpeed {
     TimeUnit unit
 
     double getTotal() { rotation.amount * unit.multiplier }
+    int getMotorSpeed() { (total * 10) as int }
 
     String toString() { "$rotation/$unit" }
 }

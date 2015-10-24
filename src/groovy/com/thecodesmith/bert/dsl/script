@@ -1,6 +1,6 @@
 go forward, 1.0.seconds at 1.0.ft/s
 go backward, 0.5.seconds at 0.7.ft/s
 stop
-turn left, 2.seconds at 15.deg/s
-turn right, 2.seconds at 15.deg/s
+turn left, 1.seconds at 15.deg/s
+turn right, 1.4.seconds at 15.deg/s
 stop

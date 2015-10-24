@@ -3,6 +3,8 @@ package com.thecodesmith.bert.dsl
 import com.thecodesmith.bert.dsl.HardwareDriver as motors
 import groovy.transform.TupleConstructor
 
+import static com.thecodesmith.bert.dsl.Direction.*
+
 @TupleConstructor
 class Command {
     String action
@@ -24,9 +26,8 @@ class GoCommand extends Command {
     }
 
     def execute() {
-        int speeds = (int)(10 * speed.total)
-        if (direction == Direction.backward) { speeds *= -1 }
-        motors.setSpeeds(speeds, speeds)
+        int motorSpeed = (direction == forward) ? speed.motorSpeed : speed.motorSpeed * -1
+        motors.setSpeeds(motorSpeed, motorSpeed)
     }
 
     String toString() {
@@ -46,7 +47,7 @@ class TurnCommand extends Command {
 
     def execute() {
         def right, left
-        def motorSpeed = (int)(10 * speed.total)
+        def motorSpeed = speed.motorSpeed
 
         if (direction == Direction.left) {
             right = motorSpeed
@@ -94,12 +95,12 @@ class StopCommand extends Command {
         this
     }
 
-    String toString() {
-        super.toString() + (time.amount ? " over $time" : "")
-    }
-
     def execute() {
         motors.setSpeeds(0, 0)
+    }
+
+    String toString() {
+        super.toString() + (time.amount ? " over $time" : "")
     }
 }
 
