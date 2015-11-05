@@ -6,11 +6,12 @@ import org.codehaus.groovy.control.CompilerConfiguration
 class ScriptRunner {
 
     static void main(args) {
-        runScript args[0]
+        def filename = args[0]
+        runScript new File(filename).text
     }
 
-    static void runScript(String filename) {
-        shell.evaluate new File(filename)
+    static runScript(String script) {
+        shell.evaluate script
     }
 
     static GroovyShell getShell() {

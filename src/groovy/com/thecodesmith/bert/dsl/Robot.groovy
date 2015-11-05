@@ -58,11 +58,30 @@ abstract class Robot extends Script {
     }
 
     static runCommands() {
-        commands.each { command ->
-            println command
-            command.execute()
-            Thread.sleep((int)(command.time.total * 1000))
+        runNextCommand()
+    }
+
+    static emergencyStop() {
+        commands.clear()
+        runCommand(stop())
+    }
+
+    private static runNextCommand() {
+        if (!commands) return
+
+        def duration = runCommand(commands.removeAt(0))
+
+        new Timer().runAfter(duration) {
+            runNextCommand()
         }
+    }
+
+    private static runCommand(Command command) {
+        println command
+        command.execute()
+
+        def duration = (int)(command.time.total * 1000)
+        duration
     }
 
     private static queueUp(command) {
