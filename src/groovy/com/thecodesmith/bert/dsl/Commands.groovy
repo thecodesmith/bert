@@ -1,11 +1,16 @@
 package com.thecodesmith.bert.dsl
 
+import com.thecodesmith.bert.dsl.HardwareDriver as motors
 import groovy.transform.TupleConstructor
+
+import static com.thecodesmith.bert.dsl.Direction.*
 
 @TupleConstructor
 class Command {
     String action
     Duration time
+
+    def execute() { }
 
     String toString() { "Command: $action" }
 }
@@ -18,6 +23,11 @@ class GoCommand extends Command {
     Command at(Speed speed) {
         this.speed = speed
         this
+    }
+
+    def execute() {
+        int motorSpeed = (direction == forward) ? speed.motorSpeed : speed.motorSpeed * -1
+        motors.setSpeeds(motorSpeed, motorSpeed)
     }
 
     String toString() {
@@ -33,6 +43,21 @@ class TurnCommand extends Command {
     TurnCommand at(RotationalSpeed speed) {
         this.speed = speed
         this
+    }
+
+    def execute() {
+        def right, left
+        def motorSpeed = speed.motorSpeed
+
+        if (direction == Direction.left) {
+            right = motorSpeed
+            left = -motorSpeed
+        } else {
+            right = -motorSpeed
+            left = motorSpeed
+        }
+
+        motors.setSpeeds(left, right)
     }
 
     String toString() {
@@ -68,6 +93,10 @@ class StopCommand extends Command {
     StopCommand over(Duration time) {
         this.time = time
         this
+    }
+
+    def execute() {
+        motors.setSpeeds(0, 0)
     }
 
     String toString() {

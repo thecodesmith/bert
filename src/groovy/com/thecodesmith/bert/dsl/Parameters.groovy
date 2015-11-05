@@ -15,6 +15,8 @@ class Distance {
         new Speed(this, t)
     }
 
+    double getTotal() { amount * unit.multiplier }
+
     String toString() { "$amount $unit" }
 }
 
@@ -23,6 +25,8 @@ class Duration {
     double amount
     TimeUnit unit
 
+    double getTotal() { amount * unit.multiplier }
+
     String toString() { "$amount $unit" }
 }
 
@@ -30,6 +34,8 @@ class Duration {
 class Rotation {
     double amount
     RotationUnit unit
+
+    double getTotal() { amount * unit.multiplier }
 
     RotationalSpeed div(TimeUnit t) {
         new RotationalSpeed(this, t)
@@ -43,6 +49,9 @@ class Speed {
     Distance distance
     TimeUnit unit
 
+    double getTotal() { distance.total * unit.multiplier }
+    int getMotorSpeed() { (total * 10) as int }
+
     String toString() { "$distance/$unit" }
 }
 
@@ -50,6 +59,9 @@ class Speed {
 class RotationalSpeed {
     Rotation rotation
     TimeUnit unit
+
+    double getTotal() { rotation.amount * unit.multiplier }
+    int getMotorSpeed() { (total * 10) as int }
 
     String toString() { "$rotation/$unit" }
 }

@@ -27,7 +27,7 @@ class MyHandler(BaseRequestHandler):
             return str(MAX_SPEED)
         else:
             try:
-                left, right = command.split(',')
+                left, right = [int(x) for x in command.split(',')]
                 motors.setSpeeds(left, right)
                 logging.info('Set speeds - Left: %s, Right: %s' % (left, right))
                 return 'Success'
