@@ -4,8 +4,6 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.*
 import groovy.servlet.*
 
-@Grab(group='org.eclipse.jetty.aggregate', module='jetty-all', version='7.6.15.v20140411')
-
 def startServer() {
     def port = 8080
     def server = new Server(port)

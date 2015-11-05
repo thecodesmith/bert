@@ -1,0 +1,12 @@
+apply plugin: 'groovy'
+apply plugin: 'jetty'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.4'
+    compile 'org.eclipse.jetty.aggregate:jetty-all:7.6.18.v20150929'
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+}

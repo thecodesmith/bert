@@ -1,4 +1,5 @@
 venv/
+.gradle/
 
 *.pyc
 *.class
