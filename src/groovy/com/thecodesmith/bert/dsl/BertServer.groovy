@@ -1,3 +1,5 @@
+package com.thecodesmith.bert.dsl
+
 import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.*
 import groovy.servlet.*

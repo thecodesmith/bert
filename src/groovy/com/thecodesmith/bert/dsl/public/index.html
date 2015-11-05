@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html>
 <head>
     <title>BERT</title>
@@ -7,8 +6,22 @@
 <body>
     <h1>BERT Control Dashboard</h1>
 
-    <form action="commands/info.groovy">
-        <button type="submit">Info</button>
+    <form action="commands/runScript.groovy">
+        <label for="script">Command:</label>
+        <input type="text" name="script">
+        <button type="submit">Run</button>
+    </form>
+
+    <div>
+        Script:
+        <form action="commands/runScript.groovy">
+            <textarea name="script" rows="10" cols="50"></textarea>
+            <button type="submit">Run</button>
+        </form>
+    </div>
+
+    <form action="commands/stop.groovy">
+        <button type="submit">Emergency Stop</button>
     </form>
 </body>
 </html>
