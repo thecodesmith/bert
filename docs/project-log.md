@@ -66,3 +66,18 @@ Ideas:
     - Groovy
     - Still lightweight: 650KB
 
+## Sprint 4
+
+Goals:
+
+* Finish commands: namely `arc`
+* Calibrate speeds
+* Polish control dashboard
+    - Styling
+    - Dynamic feedback on errors
+    - Current motor state
+    - Command history
+    - Syntax and example reference
+* Finish robot body
+    - Fix battery weight issues at high speeds
+    - Add some color and personality
