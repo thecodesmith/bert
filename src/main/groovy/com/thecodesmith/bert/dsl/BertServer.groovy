@@ -4,23 +4,31 @@ import org.eclipse.jetty.server.Server
 import org.eclipse.jetty.servlet.*
 import groovy.servlet.*
 
-def startServer() {
-    def port = 8080
-    def server = new Server(port)
+class BertServer {
 
-    def handler = new ServletContextHandler(ServletContextHandler.SESSIONS)
-    handler.contextPath = '/'
-    handler.resourceBase = '.'
-    handler.addServlet(GroovyServlet, '/commands/*')
+    static String basePath = System.getProperty('user.dir') + '/src/main/groovy/com/thecodesmith/bert/dsl'
 
-    def filesHolder = handler.addServlet(DefaultServlet, '/')
-    filesHolder.setInitParameter('resourceBase', './public')
+    static void main(args) {
+        startServer()
+    }
 
-    server.handler = handler
-    server.start()
+    static startServer() {
+        println 'Starting server ...'
 
-    println "Server running at port $port, press Ctrl+C to stop"
+        def port = 8080
+        def server = new Server(port)
+
+        def handler = new ServletContextHandler(ServletContextHandler.SESSIONS)
+        handler.contextPath = '/'
+        handler.resourceBase = '.'
+        handler.addServlet(GroovyServlet, basePath + '/commands/*')
+
+        def filesHolder = handler.addServlet(DefaultServlet, '/')
+        filesHolder.setInitParameter('resourceBase', basePath + '/public')
+
+        server.handler = handler
+        server.start()
+
+        println "Server running at port $port, press Ctrl+C to stop"
+    }
 }
-
-println 'Starting server ...'
-startServer()
