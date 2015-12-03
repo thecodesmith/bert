@@ -1,27 +1,42 @@
 <!doctype html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>BERT</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bert.css" rel="stylesheet">
 </head>
 <body>
-    <h1>BERT Control Dashboard</h1>
+    <div class="container" spellcheck="false">
 
-    <form action="commands/runScript.groovy">
-        <label for="script">Command:</label>
-        <input type="text" name="script">
-        <button type="submit">Run</button>
-    </form>
+        <h1>BERT Control Dashboard</h1>
 
-    <div>
-        Script:
-        <form action="commands/runScript.groovy">
-            <textarea name="script" rows="10" cols="50"></textarea>
-            <button type="submit">Run</button>
-        </form>
+        <div class="col-md-8 command-block">
+            <form action="commands/runScript.groovy" class="">
+                <input type="text" name="script" class="form-control col-md-8 script" placeholder="Send a single command here" autocomplete="off">
+                <button type="submit" class="btn btn-primary col-md-3">Run</button>
+            </form>
+        </div>
+
+        <div class="col-md-8 script-block">
+            <form action="commands/runScript.groovy">
+                <textarea name="script" rows="10" cols="50" class="form-control script" placeholder="Write a script here" autocomplete="off"></textarea>
+                <button type="submit" class="btn btn-primary col-md-3">Run</button>
+            </form>
+        </div>
+
+        <div class="col-md-8 button-block">
+            <form action="commands/stop.groovy">
+                <button type="submit" class="btn btn-danger col-md-4">Emergency Stop</button>
+            </form>
+        </div>
+
+        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
     </div>
-
-    <form action="commands/stop.groovy">
-        <button type="submit">Emergency Stop</button>
-    </form>
 </body>
 </html>

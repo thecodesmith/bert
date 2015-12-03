@@ -1,0 +1,33 @@
+body {
+    color: lightgray;
+    background: -webkit-linear-gradient(left, rgba(0,0,0,0.8) 0%, rgba(1,1,1,0.4) 50%, rgba(0,0,0,0.8) 100%), url("images/pixelated.png");
+    background:    -moz-linear-gradient(left, rgba(0,0,0,0.8) 0%, rgba(1,1,1,0.4) 50%, rgba(0,0,0,0.8) 100%), url("images/pixelated.png");
+    background:      -o-linear-gradient(left, rgba(0,0,0,0.8) 0%, rgba(1,1,1,0.4) 50%, rgba(0,0,0,0.8) 100%), url("images/pixelated.png");
+    background:     -ms-linear-gradient(left, rgba(0,0,0,0.8) 0%, rgba(1,1,1,0.4) 50%, rgba(0,0,0,0.8) 100%), url("images/pixelated.png");
+    background:     linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(1,1,1,0.4) 50%, rgba(0,0,0,0.8) 100%), url("images/pixelated.png");
+}
+
+.container {
+    background-color: #1C1C1C;
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-family: monospace;
+}
+
+.form-control {
+    border-color: dimgray;
+    border-width: 2px;
+    background-color: #0C0C0C;
+    color: lightgray;
+    font-family: monospace;
+    margin-bottom: 15px;
+}
+
+.command-block,
+.script-block,
+.button-block {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
